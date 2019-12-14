@@ -67,7 +67,7 @@ class PlanController {
         .status(401)
         .json({ error: 'Somente administradores podem criar novos planos' });
     }
-    const plans = await Plan.findByPk(req.params.id);
+    const plans = await Plan.findByPk(req.params.plan_id);
 
     if (!plans) {
       return res.status(404).json({ error: 'Este plano não existe' });
@@ -90,7 +90,7 @@ class PlanController {
         .status(401)
         .json({ error: 'Somente administradores podem criar novos planos' });
     }
-    const plans = await Plan.findByPk(req.params.id);
+    const plans = await Plan.findByPk(req.params.plan_id);
 
     if (!plans) {
       return res.status(404).json({ error: 'Este plano não existe' });

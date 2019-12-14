@@ -4,6 +4,9 @@ import User from '../models/User';
 import Plan from '../models/Plan';
 import Student from '../models/Student';
 
+import RegistrationMail from '../jobs/RegistrationMail';
+import Queue from '../../lib/Queue';
+
 class RegistrationController {
   async index(req, res) {
     const adm = await User.findByPk(req.userId);
@@ -63,6 +66,12 @@ class RegistrationController {
       end_date: finishedRegist,
     });
 
+    await Queue.add(RegistrationMail.key, {
+      student,
+      finishedRegist,
+      plan,
+    });
+
     return res.json(registration);
   }
 
@@ -84,7 +93,7 @@ class RegistrationController {
       return res.status(404).json({ error: 'Este plano não existe' });
     }
 
-    const registration = await Registration.findByPk(req.params.id);
+    const registration = await Registration.findByPk(req.params.regis_id);
     if (!registration) {
       return res.status(404).json({ error: 'Essa matricula não existe' });
     }
@@ -110,7 +119,7 @@ class RegistrationController {
         .status(401)
         .json({ error: 'Somente administradores podem matricular alunos' });
     }
-    const registration = await Registration.findByPk(req.params.id, {
+    const registration = await Registration.findByPk(req.params.regis_id, {
       include: [
         {
           model: Student,

@@ -4,14 +4,14 @@ import Student from '../models/Student';
 
 class HelpOrdersController {
   async index(req, res) {
-    const student = await Student.findByPk(req.params.id);
+    const student = await Student.findByPk(req.params.stud_id);
     if (!student) {
       return res.status(401).json({
-        error: 'Somente alunos credenciado podem criar pedidos de ajuda',
+        error: 'Somente alunos credenciados podem criar pedidos de ajuda',
       });
     }
     const helOrder = await HelpOrders.findAll({
-      where: { student_id: req.params.id },
+      where: { student_id: req.params.stud_id },
     });
 
     return res.json(helOrder);
@@ -27,14 +27,14 @@ class HelpOrdersController {
       });
     }
 
-    const student = await Student.findByPk(req.params.id);
+    const student = await Student.findByPk(req.params.stud_id);
     if (!student) {
       return res.status(401).json({
         error: 'Somente alunos credenciado podem criar pedidos de ajuda',
       });
     }
     const helpOrder = await HelpOrders.create({
-      student_id: req.params.id,
+      student_id: req.params.stud_id,
       question: req.body.question,
     });
 

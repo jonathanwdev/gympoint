@@ -19,8 +19,8 @@ routes.post('/students/:id/checkins', CheckinController.store);
 routes.get('/students/:id/checkins', CheckinController.index);
 
 /** Help Orders */
-routes.post('/students/:id/help-orders', HelpOrdersController.store);
-routes.get('/students/:id/help-orders', HelpOrdersController.index);
+routes.post('/students/:stud_id/help-orders', HelpOrdersController.store);
+routes.get('/students/:stud_id/help-orders', HelpOrdersController.index);
 
 routes.use(authMiddleware);
 
@@ -30,16 +30,16 @@ routes.delete('/students/:id', StudentController.delete);
 
 routes.post('/plans', PlanController.store);
 routes.get('/plans', PlanController.index);
-routes.put('/plans/:id', PlanController.update);
-routes.delete('/plans/:id', PlanController.delete);
+routes.put('/plans/:plan_id', PlanController.update);
+routes.delete('/plans/:plan_id', PlanController.delete);
 
 routes.post('/registrations', RegistrationController.store);
 routes.get('/registrations', RegistrationController.index);
-routes.put('/registrations/:id', RegistrationController.update);
-routes.delete('/registrations/:id', RegistrationController.delete);
+routes.put('/registrations/:regis_id', RegistrationController.update);
+routes.delete('/registrations/:regis_id', RegistrationController.delete);
 
-/** Aswer Hel Orders */
-routes.post('/help-orders/:id/answer', AnswerController.store);
+/** Aswer Help Orders */
+routes.post('/help-orders/:help_id/answer', AnswerController.store);
 routes.get('/help-orders', AnswerController.index);
 
 export default routes;
