@@ -9,13 +9,29 @@ import Queue from '../../lib/Queue';
 
 class RegistrationController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     const adm = await User.findByPk(req.userId);
     if (!adm) {
       return res
         .status(401)
         .json({ error: 'Somente administradores podem matricular alunos' });
     }
-    const registrations = await Registration.findAll();
+    const registrations = await Registration.findAll({
+      attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
+      limit: 10,
+      offset: (page - 1) * 10,
+      include: [
+        {
+          model: Plan,
+          attributes: ['id', 'title'],
+        },
+        {
+          model: Student,
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
+    });
     return res.json(registrations);
   }
 

@@ -15,31 +15,32 @@ const routes = new Router();
 routes.post('/sessions', SessionController.store);
 
 /** CHECK-INS */
-routes.post('/students/:id/checkins', CheckinController.store);
 routes.get('/students/:id/checkins', CheckinController.index);
+routes.post('/students/:id/checkins', CheckinController.store);
 
 /** Help Orders */
-routes.post('/students/:stud_id/help-orders', HelpOrdersController.store);
 routes.get('/students/:stud_id/help-orders', HelpOrdersController.index);
+routes.post('/students/:stud_id/help-orders', HelpOrdersController.store);
 
 routes.use(authMiddleware);
 
+routes.get('/students', StudentController.index);
 routes.post('/students', StudentController.store);
 routes.put('/students/:id', StudentController.update);
 routes.delete('/students/:id', StudentController.delete);
 
-routes.post('/plans', PlanController.store);
 routes.get('/plans', PlanController.index);
+routes.post('/plans', PlanController.store);
 routes.put('/plans/:plan_id', PlanController.update);
 routes.delete('/plans/:plan_id', PlanController.delete);
 
-routes.post('/registrations', RegistrationController.store);
 routes.get('/registrations', RegistrationController.index);
+routes.post('/registrations', RegistrationController.store);
 routes.put('/registrations/:regis_id', RegistrationController.update);
 routes.delete('/registrations/:regis_id', RegistrationController.delete);
 
 /** Aswer Help Orders */
-routes.post('/help-orders/:help_id/answer', AnswerController.store);
 routes.get('/help-orders', AnswerController.index);
+routes.post('/help-orders/:help_id/answer', AnswerController.store);
 
 export default routes;

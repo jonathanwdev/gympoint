@@ -1,8 +1,32 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Student from '../models/Student';
 import User from '../models/User';
 
 class StudentController {
+  async index(req, res) {
+    const adm = await User.findByPk(req.userId);
+    if (!adm) {
+      return res
+        .status(401)
+        .json({ error: 'Somente administradores tem acesso a essa função' });
+    }
+    const { username = '', page = 1 } = req.query;
+
+    const students = await Student.findAndCountAll({
+      where: {
+        name: {
+          [Op.like]: `%${username}%`,
+        },
+      },
+      limit: 10,
+      offset: (page - 1) * 10,
+      order: ['name'],
+    });
+
+    return res.json(students);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
