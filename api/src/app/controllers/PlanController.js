@@ -3,6 +3,20 @@ import Plan from '../models/Plan';
 import User from '../models/User';
 
 class PlanController {
+  async show(req, res) {
+    const adm = await User.findByPk(req.userId);
+    if (!adm) {
+      return res
+        .status(401)
+        .json({ error: 'Somente administradores podem criar novos planos' });
+    }
+    const plans = await Plan.findByPk(req.params.plan_id);
+    if (!plans) {
+      return res.status(404).json({ error: 'Impossivel encontrar este plano' });
+    }
+    return res.json(plans);
+  }
+
   async index(req, res) {
     const adm = await User.findByPk(req.userId);
     if (!adm) {
@@ -10,7 +24,10 @@ class PlanController {
         .status(401)
         .json({ error: 'Somente administradores podem criar novos planos' });
     }
-    const plans = await Plan.findAll();
+    const plans = await Plan.findAll({
+      attributes: ['id', 'title', 'duration', 'price'],
+      order: ['price'],
+    });
     return res.json(plans);
   }
 

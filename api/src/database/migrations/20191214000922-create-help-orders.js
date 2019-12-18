@@ -12,7 +12,6 @@ module.exports = {
         references: { model: 'students', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
-        allowNull: false,
       },
       question: {
         type: Sequelize.TEXT,

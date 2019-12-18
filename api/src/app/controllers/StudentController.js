@@ -4,6 +4,20 @@ import Student from '../models/Student';
 import User from '../models/User';
 
 class StudentController {
+  async show(req, res) {
+    const adm = await User.findByPk(req.userId);
+    if (!adm) {
+      return res
+        .status(401)
+        .json({ error: 'Somente administradores tem acesso a essa função' });
+    }
+    const student = await Student.findByPk(req.params.stude_id);
+    if (!student) {
+      return res.status(404).json({ error: 'Estudante não encontrado' });
+    }
+    return res.json(student);
+  }
+
   async index(req, res) {
     const adm = await User.findByPk(req.userId);
     if (!adm) {
@@ -97,7 +111,7 @@ class StudentController {
       });
     }
 
-    const student = await Student.findByPk(req.params.id);
+    const student = await Student.findByPk(req.params.stud_id);
     if (!student) {
       return res
         .status(404)
@@ -126,7 +140,7 @@ class StudentController {
       });
     }
 
-    const student = await Student.findByPk(req.params.id);
+    const student = await Student.findByPk(req.params.stud_id);
     if (!student) {
       return res
         .status(404)

@@ -24,11 +24,13 @@ routes.post('/students/:stud_id/help-orders', HelpOrdersController.store);
 
 routes.use(authMiddleware);
 
+routes.get('/students/:stude_id', StudentController.show);
 routes.get('/students', StudentController.index);
 routes.post('/students', StudentController.store);
-routes.put('/students/:id', StudentController.update);
-routes.delete('/students/:id', StudentController.delete);
+routes.put('/students/:stud_id', StudentController.update);
+routes.delete('/students/:stud_id', StudentController.delete);
 
+routes.get('/plans/:plan_id', PlanController.show);
 routes.get('/plans', PlanController.index);
 routes.post('/plans', PlanController.store);
 routes.put('/plans/:plan_id', PlanController.update);

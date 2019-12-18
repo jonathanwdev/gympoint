@@ -1,9 +1,10 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
+import { signInRequest } from '~/store/modules/auth/actions';
 import Logo from '~/assets/logoHome.svg';
-
-import { Container } from './styles';
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -13,9 +14,13 @@ const schema = Yup.object().shape({
 });
 
 export default function SignIn() {
-  function handleSubmit(data) {
-    console.tron.log(data);
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
+
+  function handleSubmit({ email, password }) {
+    dispatch(signInRequest(email, password));
   }
+
   return (
     <>
       <img src={Logo} alt="GymPoiny" />
@@ -32,7 +37,9 @@ export default function SignIn() {
           label="Sua senha"
           placeholder="*******"
         />
-        <button type="submit">Entrar no sistema</button>
+        <button type="submit">
+          {loading ? 'Carregando...' : 'Entrar no sistema'}
+        </button>
       </Form>
     </>
   );
