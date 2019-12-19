@@ -16,8 +16,8 @@ import { Container, StudentTable, ChangePage, Button } from './styles';
 
 export default function Students() {
   const [username, setUsername] = useState('');
-  const [page, setPage] = useState(1);
   const [students, setStudents] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     async function loadStudents() {
@@ -62,7 +62,7 @@ export default function Students() {
       <header>
         <h2>Gerenciar alunos</h2>
         <div>
-          <Link to="/create-student">
+          <Link to="/students/create">
             <IoMdAdd color="#fff" size={20} />
             CADASTRAR
           </Link>
@@ -93,7 +93,7 @@ export default function Students() {
               <td>{student.age}</td>
               <td>
                 <div>
-                  <Link to={`/update-student/${student.id}`}>Editar</Link>
+                  <Link to={`/students/update/${student.id}`}>Editar</Link>
                   <button
                     type="button"
                     onClick={() => handleDelete(student.id)}

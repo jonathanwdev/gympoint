@@ -43,7 +43,7 @@ export default function Plans() {
     <Container>
       <header>
         <h2>Gerenciar planos</h2>
-        <Link to="/create-plan">
+        <Link to="/plans/create">
           <IoMdAdd color="#fff" size={20} />
           CADASTRAR
         </Link>
@@ -65,7 +65,7 @@ export default function Plans() {
               <td>{plan.priceFormatted}</td>
               <td>
                 <div>
-                  <Link to={`update-plan/${plan.id}`}>Editar</Link>
+                  <Link to={`/plans/update/${plan.id}`}>Editar</Link>
                   <button type="button" onClick={() => handleDelete(plan.id)}>
                     Excluir
                   </button>

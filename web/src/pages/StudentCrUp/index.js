@@ -27,7 +27,7 @@ const schema = Yup.object().shape({
 });
 
 export default function StudentCrUp({ match }) {
-  const [, option] = useLocation().pathname.split('/');
+  const [...option] = useLocation().pathname.split('/');
   const [students, setStudents] = useState({});
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function StudentCrUp({ match }) {
   }, [match.params.id]);
 
   async function handleSubmit(data) {
-    if (option === 'create-student') {
+    if (option[2] === 'create') {
       try {
         await api.post('/students', data);
         history.push('/students');

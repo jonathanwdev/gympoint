@@ -1,4 +1,4 @@
-import { addMonths, parseISO } from 'date-fns';
+import { addMonths, parseISO, subHours } from 'date-fns';
 import Registration from '../models/Registration';
 import User from '../models/User';
 import Plan from '../models/Plan';
@@ -8,6 +8,24 @@ import RegistrationMail from '../jobs/RegistrationMail';
 import Queue from '../../lib/Queue';
 
 class RegistrationController {
+  async show(req, res) {
+    const registration = await Registration.findByPk(req.params.regis_id, {
+      attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
+
+      include: [
+        {
+          model: Plan,
+          attributes: ['id', 'title'],
+        },
+        {
+          model: Student,
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
+    });
+    return res.json(registration);
+  }
+
   async index(req, res) {
     const { page = 1 } = req.query;
 
@@ -56,7 +74,7 @@ class RegistrationController {
     }
 
     const parsedDate = parseISO(start_date);
-    if (parsedDate < new Date()) {
+    if (parsedDate < subHours(new Date(), 3)) {
       return res
         .status(401)
         .json({ error: 'Datas passadas não são permitidas' });

@@ -11,7 +11,7 @@ import history from '~/services/history';
 import { Container, Content } from './styles';
 
 export default function PlanCrUp({ match }) {
-  const [, option] = useLocation().pathname.split('/');
+  const [...option] = useLocation().pathname.split('/');
   const [plans, setPlans] = useState([]);
 
   const [price, setPrice] = useState(0);
@@ -29,7 +29,7 @@ export default function PlanCrUp({ match }) {
   }, [match.params.id]);
 
   async function handleSubmit(data) {
-    if (option === 'create-plan') {
+    if (option[2] === 'create') {
       try {
         await api.post('/plans', data);
         history.push('/plans');
@@ -92,6 +92,7 @@ export default function PlanCrUp({ match }) {
                 step="0.01"
                 min="0"
                 max="10"
+                readOnly
               />
             </div>
           </footer>

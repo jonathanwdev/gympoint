@@ -19,27 +19,27 @@ export default function Routes() {
     <Switch>
       <Route path="/" exact component={SignIn} />
 
-      <Route path="/registrations" component={Registrations} isPrivate />
+      <Route path="/registrations" exact component={Registrations} isPrivate />
       <Route
-        path="/create-registrantion"
+        path="/registrations/create"
         component={RegistrationCrUp}
         isPrivate
       />
       <Route
-        path="/update-registration/:id"
+        path="/registrations/update/:id"
         component={RegistrationCrUp}
         isPrivate
       />
 
       <Route path="/help" component={HelpOrders} isPrivate />
 
-      <Route path="/students" component={Students} isPrivate />
-      <Route path="/update-student/:id" component={StudentCrUp} isPrivate />
-      <Route path="/create-student" component={StudentCrUp} isPrivate />
+      <Route path="/students" exact component={Students} isPrivate />
+      <Route path="/students/update/:id" component={StudentCrUp} isPrivate />
+      <Route path="/students/create" component={StudentCrUp} isPrivate />
 
-      <Route path="/plans" component={Plans} isPrivate />
-      <Route path="/update-plan/:id" exact component={PlanCrUp} isPrivate />
-      <Route path="/create-plan" exact component={PlanCrUp} isPrivate />
+      <Route path="/plans" exact component={Plans} isPrivate />
+      <Route path="/plans/update/:id" component={PlanCrUp} isPrivate />
+      <Route path="/plans/create" component={PlanCrUp} isPrivate />
     </Switch>
   );
 }

@@ -65,7 +65,7 @@ export default function Registrations() {
     <Container>
       <header>
         <h2>Gerenciar planos</h2>
-        <Link to="/create-registration">
+        <Link to="/registrations/create">
           <IoMdAdd color="#fff" size={20} />
           CADASTRAR
         </Link>
@@ -93,7 +93,7 @@ export default function Registrations() {
               </Td>
               <Td>
                 <div>
-                  <Link to={`/update-registration/${regis.id}`}>Editar</Link>
+                  <Link to={`/registrations/update/${regis.id}`}>Editar</Link>
                   <button type="button" onClick={() => handleDelete(regis.id)}>
                     Excluir
                   </button>

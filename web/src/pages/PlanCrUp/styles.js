@@ -90,10 +90,11 @@ export const Content = styled.div`
     div {
       display: flex;
       flex-direction: column;
-    }
-    div:nth-child(3) {
-      input {
-        background: #f5f5f5;
+
+      &:nth-child(3) {
+        input {
+          background: #f5f5f5;
+        }
       }
     }
   }
