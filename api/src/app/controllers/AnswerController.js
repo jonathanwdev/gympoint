@@ -1,7 +1,7 @@
+import * as Yup from 'yup';
 import User from '../models/User';
 import Student from '../models/Student';
 import HelpOrders from '../models/HelpOrders';
-
 import AnswerMail from '../jobs/AnswerMail';
 import Queue from '../../lib/Queue';
 
@@ -27,6 +27,14 @@ class AnswerController {
   }
 
   async store(req, res) {
+    const schema = Yup.object().shape({
+      answer: Yup.string(),
+    });
+    if (!(await schema.isValid(req.body.anser))) {
+      return res.status(400).json({
+        error: 'Falha na validação dos dados, confira todos os campos',
+      });
+    }
     const adm = await User.findByPk(req.userId);
     if (!adm) {
       return res.status(401).json({

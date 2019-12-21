@@ -1,4 +1,5 @@
 import { addMonths, parseISO, subHours } from 'date-fns';
+import * as Yup from 'yup';
 import Registration from '../models/Registration';
 import User from '../models/User';
 import Plan from '../models/Plan';
@@ -15,10 +16,12 @@ class RegistrationController {
       include: [
         {
           model: Plan,
-          attributes: ['id', 'title'],
+          as: 'plan',
+          attributes: ['id', 'title', 'price', 'duration'],
         },
         {
           model: Student,
+          as: 'student',
           attributes: ['id', 'name', 'email'],
         },
       ],
@@ -42,10 +45,12 @@ class RegistrationController {
       include: [
         {
           model: Plan,
+          as: 'plan',
           attributes: ['id', 'title'],
         },
         {
           model: Student,
+          as: 'student',
           attributes: ['id', 'name', 'email'],
         },
       ],
@@ -54,6 +59,17 @@ class RegistrationController {
   }
 
   async store(req, res) {
+    const schema = Yup.object().shape({
+      student_id: Yup.number().required(),
+      plan_id: Yup.number().required(),
+      start_date: Yup.date().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({
+        error: 'Falha na validação dos dados, confira todos os campos',
+      });
+    }
     const { student_id, plan_id, start_date } = req.body;
 
     const adm = await User.findByPk(req.userId);
@@ -65,12 +81,12 @@ class RegistrationController {
 
     const student = await Student.findByPk(student_id);
     if (!student) {
-      return res.status(404).json({ error: 'Esse estudante não existe' });
+      return res.status(404).json({ error: 'Este estudante não existe' });
     }
 
     const plan = await Plan.findByPk(plan_id);
     if (!plan) {
-      return res.status(404).json({ error: 'Este plano não existe' });
+      return res.status(404).json({ error: 'Insira um plano valido' });
     }
 
     const parsedDate = parseISO(start_date);
@@ -96,7 +112,7 @@ class RegistrationController {
       student_id,
       price: plan.price * plan.duration,
       plan_id,
-      start_date: parsedDate,
+      start_date,
       end_date: finishedRegist,
     });
 
@@ -111,6 +127,7 @@ class RegistrationController {
 
   async update(req, res) {
     const { student_id, plan_id, start_date } = req.body;
+
     const adm = await User.findByPk(req.userId);
 
     if (!adm) {
@@ -157,10 +174,12 @@ class RegistrationController {
       include: [
         {
           model: Student,
+          as: 'student',
           attributes: ['id', 'name'],
         },
         {
           model: Plan,
+          as: 'plan',
           attributes: ['id', 'title'],
         },
       ],

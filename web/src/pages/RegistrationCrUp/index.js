@@ -1,14 +1,16 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { addMonths, format, parseISO } from 'date-fns';
+import { addMonths, format } from 'date-fns';
 
 import { Link, useLocation } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select';
+import moment from 'moment';
 import Datepicker from 'react-datepicker';
 import { formatPrice } from '~/util/format';
 import { planStyles, studentStyles } from './selectorStyle';
@@ -21,17 +23,23 @@ import { Container, Content, InputContainer } from './styles';
 
 export default function RegistrationCrUp({ match }) {
   const [...option] = useLocation().pathname.split('/');
+  const [oldStudent, setOldStudent] = useState({});
 
   const [planOptions, setPlanOption] = useState([]);
   const [registrations, setRegistrations] = useState({});
   const [selected, setSelected] = useState(null);
   const [username, setUsername] = useState('');
   const [plan, setPlan] = useState({});
-  const [newDate, setNewDate] = useState(new Date());
 
+  const dateWithMoment = moment(registrations.start_date).toDate();
+  const endDatewithMoment = moment(registrations.end_date).toDate();
+
+  const [newDate, setNewDate] = useState(
+    option === 'update' ? dateWithMoment : ''
+  );
   const totalPrice = formatPrice(plan.duration * plan.price || 0);
   const endDate = format(
-    addMonths(newDate, plan.duration || 0),
+    addMonths(newDate || new Date(), plan.duration || 0),
     "dd'/'MM'/'yyyy"
   );
 
@@ -62,34 +70,61 @@ export default function RegistrationCrUp({ match }) {
     return data;
   }
 
-  async function handleSubmit() {
-    try {
-      await api.post('/registrations', {
-        student_id: selected,
-        plan_id: Number(plan.id),
-        start_date: newDate,
-      });
-      toast.success('Registro efetuado com sucesso !!');
-      history.push('/registrations');
-    } catch (err) {
-      toast.error(err.response.data.error);
+  async function handleSubmit({ start_date }) {
+    if (option[2] === 'create') {
+      try {
+        await api.post('/registrations', {
+          student_id: selected,
+          plan_id: Number(plan.id),
+          start_date: newDate,
+        });
+        toast.success('Registro efetuado com sucesso !!');
+        history.push('/registrations');
+      } catch (err) {
+        toast.error(err.response.data.error);
+      }
+    } else {
+      try {
+        await api.put(`/registrations/${match.params.id}`, {
+          student_id: oldStudent.value,
+          plan_id: Number(plan.id),
+          start_date:
+            registrations.start_date && !undefined
+              ? registrations.start_date
+              : newDate,
+        });
+        toast.success('Edição efetuada com sucesso !!');
+        history.push('/registrations');
+      } catch (err) {
+        toast.error(err.response.data.error);
+      }
     }
   }
 
   useEffect(() => {
     async function loadRegistrations() {
       const response = await api.get(`/registrations/${match.params.id}`);
+
+      const oldstudent = {
+        value: response.data.student.id,
+        label: response.data.student.name,
+      };
+      setOldStudent(oldstudent);
       setRegistrations(response.data);
     }
+
     loadRegistrations();
   }, [match.params.id]);
 
-  console.tron.log(newDate, parseISO(registrations.start_date));
   return (
     <Container>
-      <Form onSubmit={handleSubmit} initialData={registrations}>
+      <Form onSubmit={handleSubmit}>
         <header>
-          <h2>Cadastro de Plano</h2>
+          {option[2] === 'create' ? (
+            <h2>Cadastro de Matrícula</h2>
+          ) : (
+            <h2>Edição de Matrícula</h2>
+          )}
           <div>
             <Link to="/registrations">
               <FaChevronLeft size={20} color="#fff" />
@@ -103,18 +138,31 @@ export default function RegistrationCrUp({ match }) {
         </header>
         <Content>
           <label htmlFor="student_id">ALUNO</label>
-          <AsyncSelect
-            name="student_id"
-            placeholder="BUSCAR ALUNO"
-            styles={studentStyles}
-            loadOptions={loadStudents}
-            onInputChange={user => setUsername(user)}
-            onChange={st => setSelected(st.id)}
-          />
+          {option[2] === 'update' ? (
+            <AsyncSelect
+              name="student_id"
+              isDisabled
+              value={oldStudent}
+              styles={studentStyles}
+            />
+          ) : (
+            <AsyncSelect
+              name="student_id"
+              placeholder="BUSCAR ALUNO"
+              styles={studentStyles}
+              loadOptions={loadStudents}
+              onInputChange={user => setUsername(user)}
+              onChange={st => setSelected(st.id)}
+            />
+          )}
 
           <footer>
             <InputContainer>
-              <label>PLANO</label>
+              {option[2] === 'create' ? (
+                <label>PLANO</label>
+              ) : (
+                <label>NOVO PLANO</label>
+              )}
               <Select
                 options={planOptions}
                 name="plan_id"
@@ -126,9 +174,10 @@ export default function RegistrationCrUp({ match }) {
 
             <InputContainer>
               <label htmlFor="start_date">DATA DE INÍCIO</label>
+
               <Datepicker
                 name="start_date"
-                selected={newDate}
+                selected={dateWithMoment && !newDate ? dateWithMoment : newDate}
                 onChange={date => setNewDate(date)}
                 dateFormat="dd'/'MM'/'yyyy"
                 minDate={new Date()}
@@ -139,18 +188,24 @@ export default function RegistrationCrUp({ match }) {
               <Input
                 label="DATA DE TÉRMINO"
                 type="text"
-                value={plan.duration ? endDate : ''}
+                value={
+                  registrations.end_date && !newDate
+                    ? format(endDatewithMoment, "dd'/'MM'/'yyyy")
+                    : endDate
+                }
                 name="end_date"
+                disabled
                 readOnly
               />
             </InputContainer>
 
             <InputContainer>
               <Input
-                label="VALOR FINAL"
-                value={totalPrice}
-                type="text"
                 name="price"
+                value={totalPrice}
+                label="VALOR FINAL"
+                type="text"
+                disabled
                 readOnly
               />
             </InputContainer>
@@ -160,3 +215,15 @@ export default function RegistrationCrUp({ match }) {
     </Container>
   );
 }
+
+RegistrationCrUp.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
+};
+
+RegistrationCrUp.defaultProps = {
+  match: '',
+};

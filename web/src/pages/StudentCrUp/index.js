@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -66,7 +67,11 @@ export default function StudentCrUp({ match }) {
     <Container>
       <Form schema={schema} initialData={students} onSubmit={handleSubmit}>
         <header>
-          <h2>Cadastro de Aluno</h2>
+          {option[2] === 'create' ? (
+            <h2>Cadastro de Aluno</h2>
+          ) : (
+            <h2>Edição de Aluno</h2>
+          )}
           <div>
             <Link to="/students">
               <FaChevronLeft size={20} color="#fff" />
@@ -109,3 +114,15 @@ export default function StudentCrUp({ match }) {
     </Container>
   );
 }
+
+StudentCrUp.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
+};
+
+StudentCrUp.defaultProps = {
+  match: '',
+};

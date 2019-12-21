@@ -84,8 +84,10 @@ export default function Registrations() {
         <tbody>
           {registrations.map(regis => (
             <tr key={regis.id}>
-              <Td>{regis.Student.name}</Td>
-              <Td>{regis.Plan.title}</Td>
+              <Td>
+                {regis.student ? regis.student.name : '--usuario removido'}
+              </Td>
+              <Td>{regis.plan ? regis.plan.title : '--plano removido'}</Td>
               <Td>{regis.formatStart}</Td>
               <Td>{regis.formatEnd}</Td>
               <Td active={regis.active}>
@@ -93,7 +95,15 @@ export default function Registrations() {
               </Td>
               <Td>
                 <div>
-                  <Link to={`/registrations/update/${regis.id}`}>Editar</Link>
+                  <Link
+                    to={
+                      !regis.student
+                        ? '/registrations'
+                        : `/registrations/update/${regis.id}`
+                    }
+                  >
+                    Editar
+                  </Link>
                   <button type="button" onClick={() => handleDelete(regis.id)}>
                     Excluir
                   </button>

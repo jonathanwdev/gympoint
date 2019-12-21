@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
@@ -9,6 +11,12 @@ import api from '~/services/api';
 import history from '~/services/history';
 
 import { Container, Content } from './styles';
+
+const schema = Yup.object().shape({
+  title: Yup.string().required('Campo obrigatorio'),
+  duration: Yup.number().required('Campo obrigatorio'),
+  price: Yup.number().required('Campo obrigatorio'),
+});
 
 export default function PlanCrUp({ match }) {
   const [...option] = useLocation().pathname.split('/');
@@ -47,12 +55,15 @@ export default function PlanCrUp({ match }) {
       }
     }
   }
-
   return (
     <Container>
-      <Form onSubmit={handleSubmit} initialData={plans}>
+      <Form onSubmit={handleSubmit} initialData={plans} schema={schema}>
         <header>
-          <h2>Cadastro de Plano</h2>
+          {option[2] === 'create' ? (
+            <h2>Cadastro de Plano</h2>
+          ) : (
+            <h2>Edição de Plano</h2>
+          )}
           <div>
             <Link to="/plans">
               <FaChevronLeft size={20} color="#fff" />
@@ -101,3 +112,15 @@ export default function PlanCrUp({ match }) {
     </Container>
   );
 }
+
+PlanCrUp.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
+};
+
+PlanCrUp.defaultProps = {
+  match: '',
+};
