@@ -1,7 +1,7 @@
 <p align="center">
   <img src="_images/logo.png"  width="400" alt="logo"/>
-</p>
-
+</p><br>
+<hr><br>
 <h4>This is a project to manage a Gym<h4>
 <i>Instructions:</i>
 <ul>
@@ -20,7 +20,7 @@
   <li>Mobile: ReactNative</li>
 </ul>
 
-<p>
+<p align="center">
   <img src="_images/back1.png" width="350" />
   <img src="_images/back2.png" width="350" />
   <img src="_images/back3.png" width="350" />
