@@ -1,5 +1,4 @@
-<img src="_images/logo.png" alt="logo" />
-<h1>Gym Point<h1>
+<img src="_images/logo.png" alt="logo"  align="middle"/>
 
 <h4>This is a project to manage a Gym<h4>
 <i>Instructions:</i>
