@@ -1,4 +1,6 @@
-<img src="_images/logo.png" alt="logo"  align="middle"/>
+<p align="center">
+  <img src="_images/logo.png" alt="logo" width="460" height="300"/>
+</p>
 
 <h4>This is a project to manage a Gym<h4>
 <i>Instructions:</i>
