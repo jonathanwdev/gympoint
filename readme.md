@@ -19,7 +19,7 @@
 
 <i>Developer Tools</i>
 <ul>
-  <li>Back-End: ExpressJS</li>
+  <li>Back-End:Node.JS ExpressJS</li>
   <li>Front-End: React</li>
   <li>Mobile: ReactNative</li>
 </ul>
