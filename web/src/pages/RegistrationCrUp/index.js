@@ -9,9 +9,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { Form, Input } from '@rocketseat/unform';
 
 import AsyncSelect from 'react-select/async';
-import Select from 'react-select';
 import moment from 'moment';
 import Datepicker from 'react-datepicker';
+import Select from 'react-select';
 import { formatPrice } from '~/util/format';
 import { planStyles, studentStyles } from './selectorStyle';
 
@@ -24,12 +24,14 @@ import { Container, Content, InputContainer } from './styles';
 export default function RegistrationCrUp({ match }) {
   const [...option] = useLocation().pathname.split('/');
   const [oldStudent, setOldStudent] = useState({});
+  const [oldPlan, setOldPlan] = useState({});
 
   const [planOptions, setPlanOption] = useState([]);
   const [registrations, setRegistrations] = useState({});
   const [selected, setSelected] = useState(null);
   const [username, setUsername] = useState('');
   const [plan, setPlan] = useState({});
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const dateWithMoment = moment(registrations.start_date).toDate();
   const endDatewithMoment = moment(registrations.end_date).toDate();
@@ -37,7 +39,7 @@ export default function RegistrationCrUp({ match }) {
   const [newDate, setNewDate] = useState(
     option === 'update' ? dateWithMoment : ''
   );
-  const totalPrice = formatPrice(plan.duration * plan.price || 0);
+
   const endDate = format(
     addMonths(newDate || new Date(), plan.duration || 0),
     "dd'/'MM'/'yyyy"
@@ -70,7 +72,7 @@ export default function RegistrationCrUp({ match }) {
     return data;
   }
 
-  async function handleSubmit({ start_date }) {
+  async function handleSubmit() {
     if (option[2] === 'create') {
       try {
         await api.post('/registrations', {
@@ -87,11 +89,8 @@ export default function RegistrationCrUp({ match }) {
       try {
         await api.put(`/registrations/${match.params.id}`, {
           student_id: oldStudent.value,
-          plan_id: Number(plan.id),
-          start_date:
-            registrations.start_date && !undefined
-              ? registrations.start_date
-              : newDate,
+          plan_id: Number(oldPlan.value),
+          start_date: newDate || registrations.start_date,
         });
         toast.success('Edição efetuada com sucesso !!');
         history.push('/registrations');
@@ -109,16 +108,23 @@ export default function RegistrationCrUp({ match }) {
         value: response.data.student.id,
         label: response.data.student.name,
       };
+      const oldestPlan = {
+        value: response.data.plan.id,
+        label: response.data.plan.title,
+        duration: response.data.plan.duration,
+        price: response.data.plan.price,
+      };
+      setTotalPrice(response.data.plan.duration * response.data.plan.price);
+      setOldPlan(oldestPlan);
       setOldStudent(oldstudent);
-      setRegistrations(response.data);
+      setRegistrations(response.data, oldestPlan);
     }
 
     loadRegistrations();
   }, [match.params.id]);
-
   return (
     <Container>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} initialData={registrations}>
         <header>
           {option[2] === 'create' ? (
             <h2>Cadastro de Matrícula</h2>
@@ -165,10 +171,14 @@ export default function RegistrationCrUp({ match }) {
               )}
               <Select
                 options={planOptions}
-                name="plan_id"
+                value={oldPlan}
+                name="plan"
                 styles={planStyles}
-                label="SELECIONE O PLANO"
-                onChange={pl => setPlan(pl)}
+                onChange={pl => {
+                  setOldPlan(pl);
+                  setPlan(pl);
+                  setTotalPrice(pl.duration * pl.price);
+                }}
               />
             </InputContainer>
 
@@ -202,7 +212,7 @@ export default function RegistrationCrUp({ match }) {
             <InputContainer>
               <Input
                 name="price"
-                value={totalPrice}
+                value={formatPrice(totalPrice)}
                 label="VALOR FINAL"
                 type="text"
                 disabled
