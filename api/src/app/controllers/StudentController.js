@@ -5,13 +5,14 @@ import User from '../models/User';
 
 class StudentController {
   async show(req, res) {
-    const adm = await User.findByPk(req.userId);
-    if (!adm) {
-      return res
-        .status(401)
-        .json({ error: 'Somente administradores tem acesso a essa função' });
+    const { stude_id } = req.params;
+    if (isNaN(stude_id)) {
+      return res.status(401).json({ error: 'Somente numeros' });
     }
-    const student = await Student.findByPk(req.params.stude_id);
+
+    const student = await Student.findByPk(stude_id, {
+      attributes: ['id', 'name', 'email', 'age', 'height', 'weight'],
+    });
     if (!student) {
       return res.status(404).json({ error: 'Estudante não encontrado' });
     }

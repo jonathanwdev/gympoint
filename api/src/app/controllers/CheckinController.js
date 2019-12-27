@@ -11,11 +11,11 @@ class CheckinController {
       return res.status(404).json({ error: 'Cadastro não encontrado' });
     }
     const { page = 1 } = req.query;
-    const checkins = await Checkin.findAll({
+    const checkins = await Checkin.findAndCountAll({
       where: { student_id: req.params.id },
-      order: [['createdAt', 'desc']],
       limit: 10,
       offset: (page - 1) * 10,
+      order: [['createdAt', 'desc']],
     });
 
     return res.json(checkins);

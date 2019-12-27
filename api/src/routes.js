@@ -22,9 +22,11 @@ routes.post('/students/:id/checkins', CheckinController.store);
 routes.get('/students/:stud_id/help-orders', HelpOrdersController.index);
 routes.post('/students/:stud_id/help-orders', HelpOrdersController.store);
 
+/** Sign app and list to update */
+routes.get('/students/:stude_id', StudentController.show);
+
 routes.use(authMiddleware);
 
-routes.get('/students/:stude_id', StudentController.show);
 routes.get('/students', StudentController.index);
 routes.post('/students', StudentController.store);
 routes.put('/students/:stud_id', StudentController.update);
