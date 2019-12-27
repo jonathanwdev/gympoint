@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="_images/logo.png" alt="logo"/>
+  <img src="_images/logo.png"  width="400" alt="logo"/>
 </p>
 
 <h4>This is a project to manage a Gym<h4>
