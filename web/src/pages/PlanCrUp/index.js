@@ -14,8 +14,12 @@ import { Container, Content } from './styles';
 
 const schema = Yup.object().shape({
   title: Yup.string().required('Campo obrigatorio'),
-  duration: Yup.number().required('Campo obrigatorio'),
-  price: Yup.number().required('Campo obrigatorio'),
+  duration: Yup.number()
+    .required('Campo obrigatorio')
+    .typeError('Insira a duração'),
+  price: Yup.number()
+    .required('Campo obrigatorio')
+    .typeError('Insira o preço'),
 });
 
 export default function PlanCrUp({ match }) {

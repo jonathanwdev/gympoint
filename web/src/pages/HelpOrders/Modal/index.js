@@ -17,7 +17,7 @@ export default function Modal({ display, order, handleDisplayNone }) {
 
   async function handleSubmit({ answer }) {
     try {
-      await api.post(`help-orders/${order}/answer`, answer);
+      await api.post(`help-orders/${order}/answer`, { answer });
       toast.success('Pergunta respondida com sucesso !');
       handleDisplayNone(order);
     } catch (err) {

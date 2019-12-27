@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FaChevronLeft, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import { addMonths, format } from 'date-fns';
 
 import { Link, useLocation } from 'react-router-dom';
@@ -21,11 +22,17 @@ import api from '~/services/api';
 import history from '~/services/history';
 import { Container, Content, InputContainer } from './styles';
 
+const schema = Yup.object().shape({
+  student_id: Yup.number(),
+  plan: Yup.number(),
+  start_date: Yup.date(),
+});
+
 export default function RegistrationCrUp({ match }) {
   const [...option] = useLocation().pathname.split('/');
   const [oldStudent, setOldStudent] = useState({});
   const [oldPlan, setOldPlan] = useState({});
-
+  const ref = useRef(null);
   const [planOptions, setPlanOption] = useState([]);
   const [registrations, setRegistrations] = useState({});
   const [selected, setSelected] = useState(null);
@@ -124,7 +131,7 @@ export default function RegistrationCrUp({ match }) {
   }, [match.params.id]);
   return (
     <Container>
-      <Form onSubmit={handleSubmit} initialData={registrations}>
+      <Form onSubmit={handleSubmit} schema={schema} initialData={registrations}>
         <header>
           {option[2] === 'create' ? (
             <h2>Cadastro de Matrícula</h2>
@@ -179,12 +186,12 @@ export default function RegistrationCrUp({ match }) {
                   setPlan(pl);
                   setTotalPrice(pl.duration * pl.price);
                 }}
+                ref={ref}
               />
             </InputContainer>
 
             <InputContainer>
               <label htmlFor="start_date">DATA DE INÍCIO</label>
-
               <Datepicker
                 name="start_date"
                 selected={dateWithMoment && !newDate ? dateWithMoment : newDate}

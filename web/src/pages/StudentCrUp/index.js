@@ -18,13 +18,17 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email('Insira um email valido')
     .required('O email é obrigatorio'),
-  age: Yup.string('Somente numeros')
+  age: Yup.number('Somente numeros')
     .min(2)
-    .required('A idade é obrigatoria'),
-  weight: Yup.string('Somente numeros')
+    .required('A idade é obrigatoria')
+    .typeError('Insira uma idade valida'),
+  weight: Yup.number('Somente numeros')
     .min(2, 'Min 2 caracteres')
-    .required('O peso é obrigatoria'),
-  height: Yup.number().required('A altura é obrigatoria'),
+    .required('O peso é obrigatoria')
+    .typeError('Insira um peso valido'),
+  height: Yup.number()
+    .required('A altura é obrigatoria')
+    .typeError('Insira uma atura valida'),
 });
 
 export default function StudentCrUp({ match }) {
