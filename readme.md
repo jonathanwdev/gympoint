@@ -9,7 +9,11 @@
   <li>Inside api's folder run:"yarn sequelize db:migrate" then: "yarn sequelize db:seed:all"</li>
   <li>Inside api's folder run: "yarn dev"</li>
   <br>
-  <li>Inside web's folder run: "yarn start"</li>
+  <li>Inside web's folder run: "yarn start"
+  <br>
+  User: "admin@gympoint.com"<br>
+  Password: "123456"
+  </li>
   <li>Inside mobile's folder run: "react-native start"</li>
 </ul>
 
