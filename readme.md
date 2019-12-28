@@ -11,9 +11,10 @@
   <li>Inside api's folder run: "yarn queue"</li>
   <br><br>
   <li>Inside web's folder run: "yarn start"
-  <br><br>
+  <br>
   User: "admin@gympoint.com"<br>
   Password: "123456"
+  <br>
   </li>
   <li>Inside mobile's folder run: "react-native start"</li>
 </ul>
