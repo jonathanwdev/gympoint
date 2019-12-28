@@ -8,9 +8,10 @@
   <li>Inside api's folder run: "docker-compose up", then: "docker-compose start"</li>
   <li>Inside api's folder run:"yarn sequelize db:migrate" then: "yarn sequelize db:seed:all"</li>
   <li>Inside api's folder run: "yarn dev"</li>
-  <br>
+  <li>Inside api's folder run: "yarn queue"</li>
+  <br><br>
   <li>Inside web's folder run: "yarn start"
-  <br>
+  <br><br>
   User: "admin@gympoint.com"<br>
   Password: "123456"
   </li>
