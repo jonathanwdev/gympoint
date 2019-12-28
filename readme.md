@@ -14,8 +14,8 @@
   <br>
   User: "admin@gympoint.com"<br>
   Password: "123456"
-  <br>
-  </li>
+  
+  </li><br>
   <li>Inside mobile's folder run: "react-native start"</li>
 </ul>
 
