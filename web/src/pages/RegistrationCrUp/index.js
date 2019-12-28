@@ -39,10 +39,13 @@ export default function RegistrationCrUp({ match }) {
   const [username, setUsername] = useState('');
   const [plan, setPlan] = useState({});
   const [totalPrice, setTotalPrice] = useState(0);
-  const [newDate, setNewDate] = useState(new Date());
 
   const dateWithMoment = moment(registrations.start_date).toDate();
   const endDatewithMoment = moment(registrations.end_date).toDate();
+
+  const [newDate, setNewDate] = useState(
+    option === 'update' ? dateWithMoment : ''
+  );
 
   const endDate = format(
     addMonths(newDate || new Date(), plan.duration || 0),
@@ -191,7 +194,7 @@ export default function RegistrationCrUp({ match }) {
               <label htmlFor="start_date">DATA DE INÍCIO</label>
               <Datepicker
                 name="start_date"
-                selected={dateWithMoment || newDate}
+                selected={dateWithMoment && !newDate ? dateWithMoment : newDate}
                 onChange={date => setNewDate(date)}
                 dateFormat="dd'/'MM'/'yyyy"
                 minDate={new Date()}
