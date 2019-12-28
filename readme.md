@@ -8,18 +8,20 @@
   <li>Inside api's folder run: "docker-compose up", then: "docker-compose start"</li>
   <li>Inside api's folder run:"yarn sequelize db:migrate" then: "yarn sequelize db:seed:all"</li>
   <li>Inside api's folder run: "yarn dev"</li>
-  <br>
+  <li>Inside api's folder run: "yarn queue"</li>
+  <br><br>
   <li>Inside web's folder run: "yarn start"
   <br>
   User: "admin@gympoint.com"<br>
   Password: "123456"
-  </li>
+  
+  </li><br>
   <li>Inside mobile's folder run: "react-native start"</li>
 </ul>
 
 <i>Developer Tools</i>
 <ul>
-  <li>Back-End: ExpressJS</li>
+  <li>Back-End:Node.JS ExpressJS</li>
   <li>Front-End: React</li>
   <li>Mobile: ReactNative</li>
 </ul>
