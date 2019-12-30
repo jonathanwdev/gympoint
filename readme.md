@@ -6,6 +6,7 @@
 <i>Instructions:</i>
 <ul>
   <li>Inside api's folder run: "docker-compose up", then: "docker-compose start"</li>
+  <li>Now you should create an (.env) file, like -> .env.example</li>
   <li>Inside api's folder run:"yarn sequelize db:migrate" then: "yarn sequelize db:seed:all"</li>
   <li>Inside api's folder run: "yarn dev"</li>
   <li>Inside api's folder run: "yarn queue"</li>
