@@ -30,7 +30,7 @@ class AnswerController {
     const schema = Yup.object().shape({
       answer: Yup.string(),
     });
-    if (!(await schema.isValid(req.body.answer))) {
+    if (!(await schema.isValid(req.body))) {
       return res.status(400).json({
         error: 'Falha na validação dos dados, confira todos os campos',
       });
